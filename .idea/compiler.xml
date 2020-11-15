@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="spring-boot" />
+        <module name="spring-boot-actuator" />
+        <module name="spring-boot-actuator-autoconfigure" />
+        <module name="spring-boot-antlib" />
+        <module name="spring-boot-autoconfigure" />
+        <module name="spring-boot-cli" />
+        <module name="spring-boot-configuration-metadata" />
+        <module name="spring-boot-configuration-processor-tests" />
+        <module name="spring-boot-devtools" />
+        <module name="spring-boot-devtools-tests" />
+        <module name="spring-boot-docs" />
+        <module name="spring-boot-launch-script-tests" />
+        <module name="spring-boot-loader" />
+        <module name="spring-boot-loader-tools" />
+        <module name="spring-boot-maven-plugin" />
+        <module name="spring-boot-properties-migrator" />
+        <module name="spring-boot-sample-test" />
+        <module name="spring-boot-server-tests" />
+        <module name="spring-boot-starter" />
+        <module name="spring-boot-starter-activemq" />
+        <module name="spring-boot-starter-actuator" />
+        <module name="spring-boot-starter-amqp" />
+        <module name="spring-boot-starter-aop" />
+        <module name="spring-boot-starter-artemis" />
+        <module name="spring-boot-starter-batch" />
+        <module name="spring-boot-starter-cache" />
+        <module name="spring-boot-starter-cloud-connectors" />
+        <module name="spring-boot-starter-data-cassandra" />
+        <module name="spring-boot-starter-data-cassandra-reactive" />
+        <module name="spring-boot-starter-data-couchbase" />
+        <module name="spring-boot-starter-data-couchbase-reactive" />
+        <module name="spring-boot-starter-data-elasticsearch" />
+        <module name="spring-boot-starter-data-jpa" />
+        <module name="spring-boot-starter-data-ldap" />
+        <module name="spring-boot-starter-data-mongodb" />
+        <module name="spring-boot-starter-data-mongodb-reactive" />
+        <module name="spring-boot-starter-data-neo4j" />
+        <module name="spring-boot-starter-data-redis" />
+        <module name="spring-boot-starter-data-redis-reactive" />
+        <module name="spring-boot-starter-data-rest" />
+        <module name="spring-boot-starter-data-solr" />
+        <module name="spring-boot-starter-freemarker" />
+        <module name="spring-boot-starter-groovy-templates" />
+        <module name="spring-boot-starter-hateoas" />
+        <module name="spring-boot-starter-integration" />
+        <module name="spring-boot-starter-jdbc" />
+        <module name="spring-boot-starter-jersey" />
+        <module name="spring-boot-starter-jetty" />
+        <module name="spring-boot-starter-jooq" />
+        <module name="spring-boot-starter-json" />
+        <module name="spring-boot-starter-jta-atomikos" />
+        <module name="spring-boot-starter-jta-bitronix" />
+        <module name="spring-boot-starter-jta-narayana" />
+        <module name="spring-boot-starter-log4j2" />
+        <module name="spring-boot-starter-logging" />
+        <module name="spring-boot-starter-mail" />
+        <module name="spring-boot-starter-mustache" />
+        <module name="spring-boot-starter-quartz" />
+        <module name="spring-boot-starter-reactor-netty" />
+        <module name="spring-boot-starter-security" />
+        <module name="spring-boot-starter-test" />
+        <module name="spring-boot-starter-thymeleaf" />
+        <module name="spring-boot-starter-tomcat" />
+        <module name="spring-boot-starter-undertow" />
+        <module name="spring-boot-starter-validation" />
+        <module name="spring-boot-starter-web" />
+        <module name="spring-boot-starter-web-services" />
+        <module name="spring-boot-starter-webflux" />
+        <module name="spring-boot-starter-websocket" />
+        <module name="spring-boot-test" />
+        <module name="spring-boot-test-autoconfigure" />
+        <module name="spring-boot-test-support" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="spring-boot" target="1.8" />
+      <module name="spring-boot-actuator" target="1.8" />
+      <module name="spring-boot-actuator-autoconfigure" target="1.8" />
+      <module name="spring-boot-antlib" target="1.8" />
+      <module name="spring-boot-autoconfigure" target="1.8" />
+      <module name="spring-boot-autoconfigure-processor" target="1.8" />
+      <module name="spring-boot-build" target="1.5" />
+      <module name="spring-boot-cli" target="1.8" />
+      <module name="spring-boot-configuration-metadata" target="1.8" />
+      <module name="spring-boot-configuration-processor" target="1.8" />
+      <module name="spring-boot-configuration-processor-tests" target="1.8" />
+      <module name="spring-boot-dependencies" target="1.5" />
+      <module name="spring-boot-devtools" target="1.8" />
+      <module name="spring-boot-devtools-tests" target="1.8" />
+      <module name="spring-boot-docs" target="1.8" />
+      <module name="spring-boot-gradle-plugin" target="1.8" />
+      <module name="spring-boot-integration-tests" target="1.8" />
+      <module name="spring-boot-launch-script-tests" target="1.8" />
+      <module name="spring-boot-loader" target="1.8" />
+      <module name="spring-boot-loader-tools" target="1.8" />
+      <module name="spring-boot-maven-plugin" target="1.8" />
+      <module name="spring-boot-parent" target="1.8" />
+      <module name="spring-boot-project" target="1.5" />
+      <module name="spring-boot-properties-migrator" target="1.8" />
+      <module name="spring-boot-sample-test" target="1.8" />
+      <module name="spring-boot-samples-invoker" target="1.8" />
+      <module name="spring-boot-server-tests" target="1.8" />
+      <module name="spring-boot-starter" target="1.8" />
+      <module name="spring-boot-starter-activemq" target="1.8" />
+      <module name="spring-boot-starter-actuator" target="1.8" />
+      <module name="spring-boot-starter-amqp" target="1.8" />
+      <module name="spring-boot-starter-aop" target="1.8" />
+      <module name="spring-boot-starter-artemis" target="1.8" />
+      <module name="spring-boot-starter-batch" target="1.8" />
+      <module name="spring-boot-starter-cache" target="1.8" />
+      <module name="spring-boot-starter-cloud-connectors" target="1.8" />
+      <module name="spring-boot-starter-data-cassandra" target="1.8" />
+      <module name="spring-boot-starter-data-cassandra-reactive" target="1.8" />
+      <module name="spring-boot-starter-data-couchbase" target="1.8" />
+      <module name="spring-boot-starter-data-couchbase-reactive" target="1.8" />
+      <module name="spring-boot-starter-data-elasticsearch" target="1.8" />
+      <module name="spring-boot-starter-data-jpa" target="1.8" />
+      <module name="spring-boot-starter-data-ldap" target="1.8" />
+      <module name="spring-boot-starter-data-mongodb" target="1.8" />
+      <module name="spring-boot-starter-data-mongodb-reactive" target="1.8" />
+      <module name="spring-boot-starter-data-neo4j" target="1.8" />
+      <module name="spring-boot-starter-data-redis" target="1.8" />
+      <module name="spring-boot-starter-data-redis-reactive" target="1.8" />
+      <module name="spring-boot-starter-data-rest" target="1.8" />
+      <module name="spring-boot-starter-data-solr" target="1.8" />
+      <module name="spring-boot-starter-freemarker" target="1.8" />
+      <module name="spring-boot-starter-groovy-templates" target="1.8" />
+      <module name="spring-boot-starter-hateoas" target="1.8" />
+      <module name="spring-boot-starter-integration" target="1.8" />
+      <module name="spring-boot-starter-jdbc" target="1.8" />
+      <module name="spring-boot-starter-jersey" target="1.8" />
+      <module name="spring-boot-starter-jetty" target="1.8" />
+      <module name="spring-boot-starter-jooq" target="1.8" />
+      <module name="spring-boot-starter-json" target="1.8" />
+      <module name="spring-boot-starter-jta-atomikos" target="1.8" />
+      <module name="spring-boot-starter-jta-bitronix" target="1.8" />
+      <module name="spring-boot-starter-jta-narayana" target="1.8" />
+      <module name="spring-boot-starter-log4j2" target="1.8" />
+      <module name="spring-boot-starter-logging" target="1.8" />
+      <module name="spring-boot-starter-mail" target="1.8" />
+      <module name="spring-boot-starter-mustache" target="1.8" />
+      <module name="spring-boot-starter-parent" target="1.8" />
+      <module name="spring-boot-starter-quartz" target="1.8" />
+      <module name="spring-boot-starter-reactor-netty" target="1.8" />
+      <module name="spring-boot-starter-security" target="1.8" />
+      <module name="spring-boot-starter-test" target="1.8" />
+      <module name="spring-boot-starter-thymeleaf" target="1.8" />
+      <module name="spring-boot-starter-tomcat" target="1.8" />
+      <module name="spring-boot-starter-undertow" target="1.8" />
+      <module name="spring-boot-starter-validation" target="1.8" />
+      <module name="spring-boot-starter-web" target="1.8" />
+      <module name="spring-boot-starter-web-services" target="1.8" />
+      <module name="spring-boot-starter-webflux" target="1.8" />
+      <module name="spring-boot-starter-websocket" target="1.8" />
+      <module name="spring-boot-starters" target="1.8" />
+      <module name="spring-boot-test" target="1.8" />
+      <module name="spring-boot-test-autoconfigure" target="1.8" />
+      <module name="spring-boot-test-support" target="1.8" />
+      <module name="spring-boot-tests" target="1.8" />
+      <module name="spring-boot-tools" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

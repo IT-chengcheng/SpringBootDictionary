@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.2//EN" "https://checkstyle.org/dtds/configuration_1_2.dtd">
+<module name="com.puppycrawl.tools.checkstyle.Checker">
+	<module name="io.spring.nohttp.checkstyle.check.NoHttpCheck">
+		<property name="whitelistFileName" value="${main.basedir}/src/checkstyle/nohttp-whitelist.txt"/>
+	</module>
+	<module name="io.spring.javaformat.checkstyle.SpringChecks" />
+	<module name="com.puppycrawl.tools.checkstyle.TreeWalker">
+		<module
+			name="com.puppycrawl.tools.checkstyle.checks.imports.IllegalImportCheck">
+			<property name="regexp" value="true" />
+			<property name="illegalPkgs"
+				value="^sun.*, ^org\.apache\.commons\.(?!compress|dbcp2|lang|lang3|logging|pool2).*, ^com\.google\.common.*, ^org\.flywaydb\.core\.internal.*" />
+			<property name="illegalClasses"
+				value="^reactor\.core\.support\.Assert" />
+		</module>
+		<module
+			name="com.puppycrawl.tools.checkstyle.checks.imports.ImportControlCheck">
+			<property name="file"
+				value="${main.basedir}/src/checkstyle/import-control.xml" />
+			<property name="path" value="^.*[\\/]src[\\/]main[\\/].*$" />
+		</module>
+		<module name="io.spring.javaformat.checkstyle.check.SpringJavadocCheck">
+			<property name="publicOnlySinceTags" value="true" />
+			<property name="requireSinceTag" value="true" />
+		</module>
+	</module>
+</module>
