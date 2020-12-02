@@ -33,8 +33,11 @@ import org.springframework.util.ReflectionUtils;
  * @author Phillip Webb
  * @author Andy Wilkinson
  */
+// 这是springboot自定的，这个类也很牛逼，做了很多事！！！
 class TomcatEmbeddedContext extends StandardContext {
 
+	// TomcatStarter implements ServletContainerInitializer
+	// TomcatStarter是springboot自定义的类，这个类很牛逼，做了很多事！！！
 	private TomcatStarter starter;
 
 	private final boolean overrideLoadOnStart;

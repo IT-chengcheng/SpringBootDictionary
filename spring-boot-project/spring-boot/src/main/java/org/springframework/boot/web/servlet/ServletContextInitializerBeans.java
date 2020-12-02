@@ -67,15 +67,22 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	/**
 	 * Seen bean instances or bean names.
 	 */
+	// 这里面会放 Servlet -dispatcherservlet，有没有其他值，暂且不研究
 	private final Set<Object> seen = new HashSet<>();
-
+  //  这里面会有很多值，其中就有  key ：ervlet.class，  value：DispatcherServletRegistrationBean
 	private final MultiValueMap<Class<?>, ServletContextInitializer> initializers;
 
 	private List<ServletContextInitializer> sortedList;
 
 	public ServletContextInitializerBeans(ListableBeanFactory beanFactory) {
 		this.initializers = new LinkedMultiValueMap<>();
+		/**
+		 *  这个方法很重要，最终目的就是填充它的两个属性 ，具体看属性解释
+		 *  Set<Object> seen
+		 *  MultiValueMap<Class<?>, ServletContextInitializer> initializers
+		 */
 		addServletContextInitializerBeans(beanFactory);
+
 		addAdaptableBeans(beanFactory);
 		List<ServletContextInitializer> sortedInitializers = this.initializers.values().stream()
 				.flatMap((value) -> value.stream().sorted(AnnotationAwareOrderComparator.INSTANCE))
@@ -84,6 +91,14 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	}
 
 	private void addServletContextInitializerBeans(ListableBeanFactory beanFactory) {
+		/**
+		 * getOrderedBeansOfType(beanFactory,ServletContextInitializer.class) 这个方法是个公共方法，很多地方都会调用，
+		 * 有两个参数，第一个一般都是beanFactory，第二个传不同的class。
+		 * 这里传入的class是ServletContextInitializer，所以获取到的是ServletContextInitializer接口类型的类
+		 * 返回参数是一个List<Entry<String, T>> ，目前来看List只有一个值 "dispatcherServletRegistration"：DispatcherServletRegistrationBean
+		 * DispatcherServletRegistrationBean实例化过程看笔记，它里面有实例化好的 dispatchservlet
+		 * ServletContextInitializer这是springboot的类，可不是javax.servlet的
+		 */
 		for (Entry<String, ServletContextInitializer> initializerBean : getOrderedBeansOfType(beanFactory,
 				ServletContextInitializer.class)) {
 			addServletContextInitializerBean(initializerBean.getKey(), initializerBean.getValue(), beanFactory);
@@ -93,6 +108,7 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 	private void addServletContextInitializerBean(String beanName, ServletContextInitializer initializer,
 			ListableBeanFactory beanFactory) {
 		if (initializer instanceof ServletRegistrationBean) {
+			// initializer就是 DispatcherServletRegistrationBean，执行了父类ServletRegistrationBean 的方法 getservlet()
 			Servlet source = ((ServletRegistrationBean<?>) initializer).getServlet();
 			addServletContextInitializerBean(Servlet.class, beanName, initializer, beanFactory, source);
 		}
@@ -194,6 +210,9 @@ public class ServletContextInitializerBeans extends AbstractCollection<ServletCo
 
 	private <T> List<Entry<String, T>> getOrderedBeansOfType(ListableBeanFactory beanFactory, Class<T> type,
 			Set<?> excludes) {
+		/**
+		 * 这个方法很多地方都会用到，传入的Class<T> type都不一样
+		 */
 		Comparator<Entry<String, T>> comparator = (o1, o2) -> AnnotationAwareOrderComparator.INSTANCE
 				.compare(o1.getValue(), o2.getValue());
 		String[] names = beanFactory.getBeanNamesForType(type, true, false);

@@ -93,6 +93,10 @@ public class DispatcherServletAutoConfiguration {
 			this.webMvcProperties = webMvcProperties;
 		}
 
+		/**
+		 * DEFAULT_DISPATCHER_SERVLET_BEAN_NAME = "dispatcherServlet"
+		 * 真正实例化 dispatcherServlet 的地方，通过@Bean的方式
+		 */
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServlet dispatcherServlet() {
 			DispatcherServlet dispatcherServlet = new DispatcherServlet();
@@ -133,6 +137,11 @@ public class DispatcherServletAutoConfiguration {
 			this.multipartConfig = multipartConfigProvider.getIfAvailable();
 		}
 
+		/**
+		 * DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME = “dispatcherServletRegistration”
+		 * DispatcherServletRegistrationBean也很重要，它继承了ServletRegistrationBean
+		 * 并且父类实现了 ServletContextInitializer接口
+		 */
 		@Bean(name = DEFAULT_DISPATCHER_SERVLET_REGISTRATION_BEAN_NAME)
 		@ConditionalOnBean(value = DispatcherServlet.class, name = DEFAULT_DISPATCHER_SERVLET_BEAN_NAME)
 		public DispatcherServletRegistrationBean dispatcherServletRegistration(DispatcherServlet dispatcherServlet) {

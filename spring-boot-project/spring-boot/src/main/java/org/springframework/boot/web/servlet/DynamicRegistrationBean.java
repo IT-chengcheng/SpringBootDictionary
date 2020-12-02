@@ -37,6 +37,10 @@ import org.springframework.util.StringUtils;
  * @author Phillip Webb
  * @since 2.0.0
  */
+
+/**
+ * DispatcherServletRegistrationBean extends ServletRegistrationBean extends DynamicRegistrationBean
+ */
 public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> extends RegistrationBean {
 
 	private static final Log logger = LogFactory.getLog(RegistrationBean.class);
@@ -105,12 +109,18 @@ public abstract class DynamicRegistrationBean<D extends Registration.Dynamic> ex
 
 	@Override
 	protected final void register(String description, ServletContext servletContext) {
+
+		/**
+		 *  终极方法，就是将servlet添加到tomcat的servletcontext中
+		 *  进入 父类 ServletRegistrationBean 的addRegistration方法
+		 */
 		D registration = addRegistration(description, servletContext);
 		if (registration == null) {
 			logger.info(
 					StringUtils.capitalize(description) + " was not registered " + "(possibly already registered?)");
 			return;
 		}
+		//就是设置了一点参数，好像不太重要
 		configure(registration);
 	}
 

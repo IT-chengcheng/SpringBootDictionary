@@ -44,6 +44,8 @@ class SpringApplicationRunListeners {
 
 	public void starting() {
 		for (SpringApplicationRunListener listener : this.listeners) {
+			// 默认只有一个  listener 就是 EventPublishingRunListener，
+			// 这个类里面有一个事件广播器SimpleApplicationEventMulticaster，负责广播事件
 			listener.starting();
 		}
 	}

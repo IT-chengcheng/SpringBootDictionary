@@ -51,6 +51,10 @@ import org.springframework.util.StringUtils;
  * @see ServletContextInitializer
  * @see ServletContext#addServlet(String, Servlet)
  */
+
+/** 这个类也很重要
+ * DispatcherServletRegistrationBean extends ServletRegistrationBean
+ */
 public class ServletRegistrationBean<T extends Servlet> extends DynamicRegistrationBean<ServletRegistration.Dynamic> {
 
 	private static final Log logger = LogFactory.getLog(ServletRegistrationBean.class);
@@ -182,6 +186,11 @@ public class ServletRegistrationBean<T extends Servlet> extends DynamicRegistrat
 	protected ServletRegistration.Dynamic addRegistration(String description, ServletContext servletContext) {
 		String name = getServletName();
 		logger.info("Servlet " + name + " mapped to " + this.urlMappings);
+		/**
+		 *  这就是真正将实例化好的 dispatcherservlet 放到入 上下文中
+		 * this.servlet啥时候赋值的？：在配置类 org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration
+		 *  通过@Bean实例化 DispatcherServletRegistrationBean时赋值的  。它是当前这个类的子类
+		 */
 		return servletContext.addServlet(name, this.servlet);
 	}
 

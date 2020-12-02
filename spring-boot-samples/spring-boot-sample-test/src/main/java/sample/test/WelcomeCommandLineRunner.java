@@ -18,6 +18,7 @@ package sample.test;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.web.SpringServletContainerInitializer;
 
 /**
  * Simple component that just prints a message. Used to show how different types of

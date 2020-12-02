@@ -34,6 +34,7 @@ import org.springframework.boot.web.servlet.ServletContextInitializer;
  * @author Phillip Webb
  * @author Andy Wilkinson
  */
+// springBoot居然自定义了 ServletContainerInitializer，而且是手动加入到tomcat，并非是通过JAVA-SPI机制！！！！！！
 class TomcatStarter implements ServletContainerInitializer {
 
 	private static final Log logger = LogFactory.getLog(TomcatStarter.class);
@@ -43,13 +44,26 @@ class TomcatStarter implements ServletContainerInitializer {
 	private volatile Exception startUpException;
 
 	TomcatStarter(ServletContextInitializer[] initializers) {
+		// 传入的其实ServletContextInitializer匿名内部类，也就是回调函数
 		this.initializers = initializers;
 	}
 
+	/**
+	 * tomcat启动成功，最终调用的就是这个方法，将servlet添加到tomcat的入口
+	 * @param classes
+	 * @param servletContext
+	 * @throws ServletException
+	 */
 	@Override
 	public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
 		try {
 			for (ServletContextInitializer initializer : this.initializers) {
+				/**
+				 * initializer是匿名内部类，也即是回调函数。
+				 * 正是通过这个回调函数，将dispatcherservlet加入到了servletContext中
+				 * 回调函数定义的位置在：ServletWebServerApplicationContext -> getSelfInitializer()
+				 * 最终调用的是 DispatcherServletRegistrationBean 的父类 RegistrationBean的 onStartup（）
+				 */
 				initializer.onStartup(servletContext);
 			}
 		}

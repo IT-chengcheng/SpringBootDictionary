@@ -29,6 +29,11 @@ import org.springframework.web.servlet.DispatcherServlet;
  * @author Phillip Webb
  * @since 2.0.4
  */
+
+/**
+ * 这个类是在org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration
+ * 通过@Bean方式实例化的
+ */
 public class DispatcherServletRegistrationBean extends ServletRegistrationBean<DispatcherServlet>
 		implements DispatcherServletPath {
 

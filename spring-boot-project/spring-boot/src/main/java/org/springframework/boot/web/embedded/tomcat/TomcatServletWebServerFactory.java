@@ -33,6 +33,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import javax.servlet.ServletContainerInitializer;
+import javax.servlet.ServletContext;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.Engine;
@@ -157,7 +158,7 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 
 	@Override
 	public WebServer getWebServer(ServletContextInitializer... initializers) {
-		// tomcatStart4
+		// tomcatStart4    再次强调传入的ServletContextInitializer是个匿名内部类，也就是一个回调函数
 		Tomcat tomcat = new Tomcat();
 		File baseDir = (this.baseDirectory != null) ? this.baseDirectory : createTempDir("tomcat");
 		tomcat.setBaseDir(baseDir.getAbsolutePath());
@@ -170,7 +171,19 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 		for (Connector additionalConnector : this.additionalTomcatConnectors) {
 			tomcat.getService().addConnector(additionalConnector);
 		}
+
+		/**tomcatStart5   这是一个超级牛逼的方法！！！
+		 * 里面自定义了  TomcatEmbeddedContext（Sringboot的） extends StandardContext（tomcat的）
+		 * 自定义了一个 TomcatStarter implements ServletContainerInitializer ，并且将它加到了tomcat中
+		 * 从而当tomcat启动完毕后，就会执行TomcatStarter  ->  onStartup(Set<Class<?>> classes, ServletContext servletContext)
+		 * 传入了两个重要参数：
+		 * 第一个是 Host 很重要 ，暂时没深究，不过一定很重要
+		 * 第二个是 ServletContextInitializer 匿名内部类，也就是回调函数，最终传到了 TomcatStarter，
+		 * 然后在onstartup里执行这个匿名内部类
+		 */
+
 		prepareContext(tomcat.getHost(), initializers);
+
 		return getTomcatWebServer(tomcat);
 	}
 
@@ -183,6 +196,7 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 
 	protected void prepareContext(Host host, ServletContextInitializer[] initializers) {
 		File documentRoot = getValidDocumentRoot();
+		//继承 tomcat的StandardContext，这是springboot自定义的
 		TomcatEmbeddedContext context = new TomcatEmbeddedContext();
 		if (documentRoot != null) {
 			context.setResources(new LoaderHidingResourceRoot(context));
@@ -218,8 +232,16 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 		}
 		context.addLifecycleListener(new StaticResourceConfigurer(context));
 		ServletContextInitializer[] initializersToUse = mergeInitializers(initializers);
+
+		//总感觉这个方法很重要，因为它将springboot自定义的TomcatEmbeddedContext放入乐tomcat的host中，暂时还没深究
 		host.addChild(context);
+
+		/** 这个方法超级重要，
+		 *  将自定义的 TomcatEmbeddedContext，以及匿名内部类（回调函数）传进去了
+		 */
 		configureContext(context, initializersToUse);
+
+		// 是个空方法
 		postProcessContext(context);
 	}
 
@@ -324,11 +346,21 @@ public class TomcatServletWebServerFactory extends AbstractServletWebServerFacto
 	 * @param initializers initializers to apply
 	 */
 	protected void configureContext(Context context, ServletContextInitializer[] initializers) {
+		/**
+		 * 	这个构造方法也看看，这里将匿名内部类，也就是回调函数传了进去
+		 * TomcatStarter有个成员变量 ServletContextInitializer[] initializers ，将传参保存了，然后在onStartup（）进行了调用
+		 */
 		TomcatStarter starter = new TomcatStarter(initializers);
 		if (context instanceof TomcatEmbeddedContext) {
 			// Should be true
 			((TomcatEmbeddedContext) context).setStarter(starter);
 		}
+		/**
+		 * 超级重要的操作！！！！！！！！！！！！！！
+		 * 将自定义的ServletContainerInitializer 加到了tomcat中
+		 * tomcat启动完毕后，实际执行的就是自定义的ServletContainerInitializer，也就是TomcatStarter
+		 * 而不是之前想象的那样，tomcat通过JAVA-SPI机制执行的！！！！！！！！！
+		 */
 		context.addServletContainerInitializer(starter, NO_CLASSES);
 		for (LifecycleListener lifecycleListener : this.contextLifecycleListeners) {
 			context.addLifecycleListener(lifecycleListener);

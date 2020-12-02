@@ -64,6 +64,9 @@ public enum WebApplicationType {
 			return WebApplicationType.REACTIVE;
 		}
 		for (String className : SERVLET_INDICATOR_CLASSES) {
+			// SERVLET_INDICATOR_CLASSES { "javax.servlet.Servlet",
+			// org.springframework.web.context.ConfigurableWebApplicationContext" }
+
 			if (!ClassUtils.isPresent(className, null)) {
 				return WebApplicationType.NONE;
 			}

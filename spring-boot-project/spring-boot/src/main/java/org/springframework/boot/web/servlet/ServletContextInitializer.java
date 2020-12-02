@@ -16,6 +16,7 @@
 
 package org.springframework.boot.web.servlet;
 
+import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -48,6 +49,7 @@ public interface ServletContextInitializer {
 	 * @throws ServletException if any call against the given {@code ServletContext}
 	 * throws a {@code ServletException}
 	 */
+	// 这个接口可是springboot的哈，可不是javax.servlet的，仔细看看
 	void onStartup(ServletContext servletContext) throws ServletException;
 
 }

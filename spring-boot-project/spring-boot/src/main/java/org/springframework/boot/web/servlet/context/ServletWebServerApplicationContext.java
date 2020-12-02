@@ -30,6 +30,7 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.apache.catalina.core.ApplicationContextFacade;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -148,6 +149,7 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 
 	@Override
 	protected void onRefresh() {
+		// 调用这个方法的类是 AnnotationConfigServletWebServerApplicationContext 它的父类是ServletWebServerApplicationContext
 		super.onRefresh();
 		try {
 			// tomcatStart2
@@ -177,8 +179,14 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 		WebServer webServer = this.webServer;
 		ServletContext servletContext = getServletContext();
 		if (webServer == null && servletContext == null) {
+			//factory = TomcatServletWebServerFactory ,在配置类中实例化，具体看笔记
 			ServletWebServerFactory factory = getWebServerFactory();
-			//tomcatStart3
+			/**  tomcatStart3
+			 * getSelfInitializer()返回的是个匿名内部类，也就是一个回调，将这个回调当做一个参数传进去，里面去调用这个回调
+			 *          这个回调的作用就是将dispatchServlet添加到Tomcat中
+			 * factory.getWebServer（）逻辑很牛逼
+			 */
+
 			this.webServer = factory.getWebServer(getSelfInitializer());
 		}
 		else if (servletContext != null) {
@@ -219,14 +227,37 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 * @see #prepareWebApplicationContext(ServletContext)
 	 */
 	private org.springframework.boot.web.servlet.ServletContextInitializer getSelfInitializer() {
+		/**
+		 * 返回了一个ServletContextInitializer匿名内部类，也即是一个回调函数
+		 * java8的双冒号语法   class:method
+		 * 会执行class类的method方法
+		 */
 		return this::selfInitialize;
 	}
 
 	private void selfInitialize(ServletContext servletContext) throws ServletException {
+
+		// 此方法的作用就是 : 让servlet的上下文与spring的上下文互相持有
 		prepareWebApplicationContext(servletContext);
+
 		registerApplicationScope(servletContext);
+
+		//就是将servletContext的一些环境参数取出来，注册到spring-bean中。
 		WebApplicationContextUtils.registerEnvironmentBeans(getBeanFactory(), servletContext);
+
+		/**
+		 * getServletContextInitializerBeans(),点进去看看吧,返回值是spring自定义的一个Collection
+		 * 这个Collection里面目前看来有5个值，分为两种
+		 *  1、一个 DispatcherServletRegistrationBean  这个类是很重要的，它里面有 dispatcherservelt
+		 *  2、 四个 FilterRegistrationBean  ，暂时没研究这是个干啥的
+		 * 不管是哪种类，都是ServletContextInitializer接口型，而且父类都是RegistrationBean，
+		 *  所以调用的都是父类RegistrationBean的 onStartup()方法
+		 */
 		for (ServletContextInitializer beans : getServletContextInitializerBeans()) {
+			/**
+			 *  beans 之一 DispatcherServletRegistrationBean extends ServletRegistrationBean extends DynamicRegistrationBean extends RegistrationBean implements ServletContextInitializer
+			 *  调用的是父类 RegistrationBean的 onStartup()
+			 */
 			beans.onStartup(servletContext);
 		}
 	}
@@ -263,6 +294,12 @@ public class ServletWebServerApplicationContext extends GenericWebApplicationCon
 	 * @param servletContext the operational servlet context
 	 */
 	protected void prepareWebApplicationContext(ServletContext servletContext) {
+		/**
+		 * 此方法的作用就是 : 让servlet的上下文与spring的上下文互相持有
+		 * servletContext 实际类 是ApplicationContextFacade，这个类不纠结，当成一个ServletContext就行，等研究Tomcat的时候在深究
+		 * spring上下文  ->  AnnotationConfigServletWebServerApplicationContext,也就是下面的this
+		 */
+
 		Object rootContext = servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 		if (rootContext != null) {
 			if (rootContext == this) {
