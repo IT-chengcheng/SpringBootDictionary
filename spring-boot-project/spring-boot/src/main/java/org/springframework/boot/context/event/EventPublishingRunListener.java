@@ -42,6 +42,7 @@ import org.springframework.util.ErrorHandler;
  * @author Andy Wilkinson
  * @since 1.0.0
  */
+// 这个类在spring.factories配置文件中配置了，也就是从配置文件中实例化的
 public class EventPublishingRunListener implements SpringApplicationRunListener, Ordered {
 
 	private final SpringApplication application;
@@ -54,6 +55,7 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 		this.application = application;
 		this.args = args;
 		this.initialMulticaster = new SimpleApplicationEventMulticaster();
+		// application中的lisentener是从spring.factory配置文件配置的，在application的构造方法中加载出来的
 		for (ApplicationListener<?> listener : application.getListeners()) {
 			this.initialMulticaster.addApplicationListener(listener);
 		}

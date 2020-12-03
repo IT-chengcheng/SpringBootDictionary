@@ -260,8 +260,12 @@ public class SpringApplication {
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
 		//springboot会自动推断，是否是web项目，或者非web项目，或者其他类型项目，也可以通过编码设置
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+
+		// 从spring.factory文件中 读取配置的 Lisentener
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
 
@@ -292,8 +296,14 @@ public class SpringApplication {
 		ConfigurableApplicationContext context = null;
 		Collection<SpringBootExceptionReporter> exceptionReporters = new ArrayList<>();
 		configureHeadlessProperty();
+		/**
+		 *  从spring.factories文件中加载 SpringApplicationRunListener接口实现类，并且将其实例化
+		 *  默认就配置了一个EventPublishingRunListener ，它的构造方法中 做了一些事，重点看看
+		 *  主要了保存了两个属性SimpleApplicationEventMulticaster ，SpringApplication，并且给Multicaster添加了springboot默认的Listener
+		 *  注意：这时候springContext还没初始化，也就是还没有 bean等这些东西！！！！
+		 */
 		SpringApplicationRunListeners listeners = getRunListeners(args);
-		// listensers里面有个数组，默认只有一个类 EventPublishingRunListener
+		// 数组里就一个，也就是它  -> EventPublishingRunListener
 		listeners.starting();
 		try {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
@@ -303,15 +313,20 @@ public class SpringApplication {
 			/**
 			 * 如果是web项目，context就是 AnnotationConfigServletWebServerApplicationContext
 			 * 这个context跟之前看springframework源码的context里面的源码几乎一样的，很是惊喜
+			 * 这里也只是实例化了 spring的上下文，还没初始化，也就是还没refresh（）
 			 */
 			context = createApplicationContext();
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
-			//这个方法，目前看来并没有做很多出奇的事
+			/**
+			 * 为初始化spring上下文做了一些准备，也广播了一些事件
+			 */
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
 			/**
 			 * tomcatStart1
 			 * 这个方法里做的事可多了：初始化spring环境，invokeBeanfactory，实例化广播器，注册监听器等等
+			 *
+			 * 真正初始化了spring上下文！！所以这时候程序员加的Listener才起作用，以及其他依赖spring上下文的操作，从这里开始发挥作用
 			 */
 			refreshContext(context);
 			afterRefresh(context, applicationArguments);
