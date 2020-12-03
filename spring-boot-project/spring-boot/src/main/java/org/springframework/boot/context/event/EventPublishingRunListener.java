@@ -95,6 +95,11 @@ public class EventPublishingRunListener implements SpringApplicationRunListener,
 
 	@Override
 	public void started(ConfigurableApplicationContext context) {
+		/**
+		 * 为什么这个方法，还有下面的方法running，是用context发布的，而不是this.initialMulticaster.multicastEvent？
+		 * 因为之前spring上下文还没初始化完毕。执行到这个方法的时候，spring上下文已经初始化完成了，所以可以从context去发布
+		 * 而且最终调用的还是multicaster.multicastEvent，因为context里面保存了SimpleApplicationEventMulticaster这个属性
+		 */
 		context.publishEvent(new ApplicationStartedEvent(this.application, this.args, context));
 	}
 
