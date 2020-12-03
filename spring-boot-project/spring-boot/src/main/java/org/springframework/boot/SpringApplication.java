@@ -261,6 +261,7 @@ public class SpringApplication {
 		//springboot会自动推断，是否是web项目，或者非web项目，或者其他类型项目，也可以通过编码设置
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
 
+		// 从spring.factory文件中 读取配置的 ApplicationContextInitializer
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
 
 		// 从spring.factory文件中 读取配置的 Lisentener
@@ -307,6 +308,9 @@ public class SpringApplication {
 		listeners.starting();
 		try {
 			ApplicationArguments applicationArguments = new DefaultApplicationArguments(args);
+			/**
+			 * 提前加载springboot环境，注意这时候spring上下文还没初始化呢！！！！！！，在下面！！！还得等会！！
+			 */
 			ConfigurableEnvironment environment = prepareEnvironment(listeners, applicationArguments);
 			configureIgnoreBeanInfo(environment);
 			Banner printedBanner = printBanner(environment);
@@ -319,7 +323,9 @@ public class SpringApplication {
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
 			/**
-			 * 为初始化spring上下文做了一些准备，也广播了一些事件
+			 * 为初始化spring上下文做了一些准备（这时spring上下文可还没初始化哈！！！！！）
+			 * 1、执行了 ApplicationContextInitializer （这个接口也是在spring.factories中，也是在applicaition构造方法初始化的）
+			 * 2、广播了一些事件
 			 */
 			prepareContext(context, environment, listeners, applicationArguments, printedBanner);
 			/**
@@ -329,7 +335,9 @@ public class SpringApplication {
 			 * 真正初始化了spring上下文！！所以这时候程序员加的Listener才起作用，以及其他依赖spring上下文的操作，从这里开始发挥作用
 			 */
 			refreshContext(context);
+
 			afterRefresh(context, applicationArguments);
+
 			stopWatch.stop();
 
 			if (this.logStartupInfo) {
@@ -359,7 +367,9 @@ public class SpringApplication {
 		// Create and configure the environment
 		ConfigurableEnvironment environment = getOrCreateEnvironment();
 		configureEnvironment(environment, applicationArguments.getSourceArgs());
+		// 发布环境准备事件，ConfigFileApplicationListener去监听，并且加载了yml  properties等配置文件
 		listeners.environmentPrepared(environment);
+
 		bindToSpringApplication(environment);
 		if (!this.isCustomEnvironment) {
 			environment = new EnvironmentConverter(getClassLoader()).convertEnvironmentIfNecessary(environment,
@@ -384,6 +394,7 @@ public class SpringApplication {
 			SpringApplicationRunListeners listeners, ApplicationArguments applicationArguments, Banner printedBanner) {
 		context.setEnvironment(environment);
 		postProcessApplicationContext(context);
+
 		applyInitializers(context);
 		// 这个方法是空方法，也就是没有广播任何事件
 		listeners.contextPrepared(context);
@@ -1183,6 +1194,7 @@ public class SpringApplication {
 	 * @param listeners the listeners to set
 	 */
 	public void setListeners(Collection<? extends ApplicationListener<?>> listeners) {
+		//这里是构造方法调用的
 		this.listeners = new ArrayList<>();
 		this.listeners.addAll(listeners);
 	}
@@ -1193,6 +1205,13 @@ public class SpringApplication {
 	 * @param listeners the listeners to add
 	 */
 	public void addListeners(ApplicationListener<?>... listeners) {
+		/**
+		 * 这个方法的用处呢？我猜测是这样：
+		 * 程序员手动编码添加监听器，为什么要手动编码添加，而不是通过@Component这样方式呢?
+		 * 因为spring上线文初始化太靠后，如果通过加@Component方式添加listener，只会对初始化上下文结束后的事件做监听。
+		 * 如果要做到spring上下文还没初始化的事件做监听，就可以通过这个方法手动提前加入一些监听器，监听一些东西
+		 */
+
 		this.listeners.addAll(Arrays.asList(listeners));
 	}
 

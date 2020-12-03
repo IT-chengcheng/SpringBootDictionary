@@ -307,6 +307,7 @@ public class ConfigFileApplicationListener implements EnvironmentPostProcessor, 
 		Loader(ConfigurableEnvironment environment, ResourceLoader resourceLoader) {
 			this.environment = environment;
 			this.resourceLoader = (resourceLoader != null) ? resourceLoader : new DefaultResourceLoader();
+			// 加载yml配置类，只是加载了用来读取yml文件的配置类
 			this.propertySourceLoaders = SpringFactoriesLoader.loadFactories(PropertySourceLoader.class,
 					getClass().getClassLoader());
 		}
