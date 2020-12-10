@@ -320,6 +320,7 @@ public class SpringApplication {
 			 * 这里也只是实例化了 spring的上下文，还没初始化，也就是还没refresh（）
 			 */
 			context = createApplicationContext();
+			// 从spring.factories配置文件中获取 报告异常的类
 			exceptionReporters = getSpringFactoriesInstances(SpringBootExceptionReporter.class,
 					new Class[] { ConfigurableApplicationContext.class }, context);
 			/**
@@ -348,6 +349,7 @@ public class SpringApplication {
 			callRunners(context, applicationArguments);
 		}
 		catch (Throwable ex) {
+			//报告异常，谁报告的？ 报告异常的类 在spring.factories配置文件中
 			handleRunFailure(context, ex, exceptionReporters, listeners);
 			throw new IllegalStateException(ex);
 		}
@@ -356,6 +358,7 @@ public class SpringApplication {
 			listeners.running(context);
 		}
 		catch (Throwable ex) {
+			//报告异常，谁报告的？ 报告异常的类 在spring.factories配置文件中
 			handleRunFailure(context, ex, exceptionReporters, null);
 			throw new IllegalStateException(ex);
 		}
@@ -446,6 +449,10 @@ public class SpringApplication {
 	private <T> Collection<T> getSpringFactoriesInstances(Class<T> type, Class<?>[] parameterTypes, Object... args) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		// Use names and ensure unique to protect against duplicates
+		/**
+		 * SpringFactoriesLoader.loadFactoryNames(type, classLoader)
+		 * 从spring.factories文件中读取接口实现类
+		 */
 		Set<String> names = new LinkedHashSet<>(SpringFactoriesLoader.loadFactoryNames(type, classLoader));
 		List<T> instances = createSpringFactoriesInstances(type, parameterTypes, classLoader, args, names);
 		AnnotationAwareOrderComparator.sort(instances);

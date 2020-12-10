@@ -32,7 +32,11 @@ import org.springframework.core.io.support.SpringFactoriesLoader;
  */
 @FunctionalInterface
 public interface SpringBootExceptionReporter {
-
+	/**
+	 * 这个接口有一个实现类FailureAnalyzers，注意后面有个s
+	 * FailureAnalyzers这个类里面会从spring.factories中读取 FailureAnalyzer接口的所有实现类，也就是
+	 * 这些实现类才是真正去报告异常的类，但是报告异常的触发时间在 Application.run 方法的 try catch里面
+	 */
 	/**
 	 * Report a startup failure to the user.
 	 * @param failure the source failure

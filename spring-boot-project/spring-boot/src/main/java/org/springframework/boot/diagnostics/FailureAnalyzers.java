@@ -47,6 +47,11 @@ import org.springframework.util.ReflectionUtils;
  * @author Phillip Webb
  * @author Stephane Nicoll
  */
+
+/**
+ * 这个类也是配置在了 spring.factories配置文件中的，但是他只是类似一个数组
+ * 真正执行异常的类是 FailureAnalyzer，注意类名没有s， FailureAnalyzer 这些类是 FailureAnalyzers 构造方法中通过spring.factories中加载的
+ */
 final class FailureAnalyzers implements SpringBootExceptionReporter {
 
 	private static final Log logger = LogFactory.getLog(FailureAnalyzers.class);
