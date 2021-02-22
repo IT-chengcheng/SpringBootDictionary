@@ -2,11 +2,12 @@
 
 ## 涉及内容,包括但不限于：
 + 1、SpringBoot启动流程
-+ 2、SpringBoot 整合tomcat源码分析
-+ 3、SpringBoot 实现模型源码分析
-## 使用方式
-+ 1、此工程就是源码工程，下载完成并且编译运行通过，保证可以断点调试
-+ 2、熟读SpringBoot官网，熟练使用SpringBoot各种API。（对SpringBoot的API不熟练，看源码就不会有方向，所以必须要对SpringBoot的API非常熟悉）
-+ 3、此手册是一部SpringBoot**源码**字典，可以帮助你精通SpringBoot源码，前提是一定要熟读SpringBoot官网API！
++ 2、SpringBoot 整合tomcat、springMVC源码分析
++ 3、SpringBoot 事件源码分析
++ 4、SpringBoot整合第三方组件源码分析
+## 研究SpringBoot源码前提
++ 1、熟读SpringBoot官网，熟练使用SpringBoot各种API，只有熟练使用，研究源码才有具体的方向！！
++ 2、本部作品就是一部SpringBoot**源码字典**，目的就是帮助想要精通SpringBoot源码的朋友尽快精通SpringBoot。
+## 本部作品只是分析了springBoot的部分核心源码，把最核心的都分析过了，其他的随用随分析！！
 
  
